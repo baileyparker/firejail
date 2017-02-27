@@ -116,6 +116,7 @@ int arg_allusers = 0;				// all user home directories visible
 int arg_machineid = 0;				// preserve /etc/machine-id
 int arg_allow_private_blacklist = 0; 		// blacklist things in private directories
 int arg_writable_var_log;			// writable /var/log
+int arg_prctl_sigterm = 0;
 
 int login_shell = 0;
 
@@ -2137,7 +2138,9 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "This feature is not enabled in the current build\n");
 			exit(1);
 		}
-		
+		else if (strcmp(argv[i], "--die-with-parent") == 0) {
+			arg_prctl_sigterm = 1;
+		}
 		else if (strcmp(argv[i], "--") == 0) {
 			// double dash - positional params to follow
 			arg_doubledash = 1;
@@ -2513,6 +2516,21 @@ int main(int argc, char **argv) {
 	
 	// wait for the child to finish
 	EUID_USER();
+
+	// EUID_ROOT()/EUID_USER() dance clears PDEATHSIG, so it must be done here
+	// This is also potentially racy, so we check afterwards if our parent is
+	// PID=1 (init), which likely means our original parent died:
+	// http://stackoverflow.com/q/42496478/568785
+	if (arg_prctl_sigterm) {
+		if (prctl(PR_SET_PDEATHSIG, SIGTERM) == -1) {
+			errExit("prctl");
+		}
+
+		if (getppid() == 1 && raise(SIGTERM) != 0) {
+			errExit("raise");
+		}
+	}
+
 	int status = 0;
 	waitpid(child, &status, 0);
 

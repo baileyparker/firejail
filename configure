@@ -580,8 +580,8 @@ MAKEFLAGS=
 # Identity of this package.
 PACKAGE_NAME='firejail'
 PACKAGE_TARNAME='firejail'
-PACKAGE_VERSION='0.9.45'
-PACKAGE_STRING='firejail 0.9.45'
+PACKAGE_VERSION='0.9.45-die-with-parent'
+PACKAGE_STRING='firejail 0.9.45-die-with-parent'
 PACKAGE_BUGREPORT='netblue30@yahoo.com'
 PACKAGE_URL='http://firejail.wordpress.com'
 

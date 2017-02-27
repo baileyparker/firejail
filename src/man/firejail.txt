@@ -378,6 +378,15 @@ Example:
 $ firejail \-\-net=eth0 \-\-defaultgw=10.10.20.1 firefox
 
 .TP
+\fB\-\-die\-with\-parent
+Causes the jailed process to be killed if/when the parent process dies.
+.br
+
+.br
+Example:
+$ firejail \-\-die\-with\-parent
+
+.TP
 \fB\-\-dns=address
 Set a DNS server for the sandbox. Up to three DNS servers can be defined.
 Use this option if you don't trust the DNS setup on your network.

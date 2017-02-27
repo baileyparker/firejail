@@ -70,6 +70,7 @@ void usage(void) {
 #ifdef HAVE_NETWORK	
 	printf("    --defaultgw=address - configure default gateway.\n");
 #endif
+	printf("    --die-with-parent - causes jailed process to be killed when parent dies\n");
 	printf("    --dns=address - set DNS server.\n");
 	printf("    --dns.print=name|pid - print DNS configuration.\n");
 	
